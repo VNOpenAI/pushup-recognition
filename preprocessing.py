@@ -8,6 +8,9 @@ import imgaug.augmenters as iaa
 import math
 tf.random.set_seed(1)
 np.random.seed(1)
+data_folder='../data'
+images_folder='../data/image'
+
 
 seq = iaa.Sequential([
     iaa.Fliplr(0.5), # horizontal flips
@@ -46,7 +49,7 @@ class DataSequence(tf.keras.utils.Sequence):
     """Convolution Block
     This function defines a 2D convolution operation with BN and relu6.
     # Arguments
-        file_json: path of json file contain  (string)
+        file_json: path of json file contain information for train,test,val dataset  (string)
         batch_size: specify batch size for trainning or predicting (int)
         aug : specify if using data augmentation (Boolean)
 
@@ -77,7 +80,7 @@ class DataSequence(tf.keras.utils.Sequence):
         for i in data:
             image_numpy=[]
             for j in i['name']:
-                single_image=cv2.imread('./Resource/images/'+j)
+                single_image=cv2.imread(images_folder+'/'+j)
                 if single_image is None:
                     print('Unable to read this image: ',j)
                     single_iamge=np.zeros((224,224,3))                   

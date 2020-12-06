@@ -4,7 +4,7 @@ import os
 import shutil
 import tensorflow.keras as keras
 tf.random.set_seed(1)
-np.random.set_seed(1)
+np.random.seed(1)
 
 """MobileNet v2
   Reference :(https://arxiv.org/abs/1801.04381) 
@@ -161,6 +161,6 @@ def MobileNetv2(input_shape, k, alpha=1.0):
     model = Model(inputs, output)
     return model
 
-def create_model():
+def create_model(input_shape=(224,224,3),alpha=1):
     model = MobileNetv2((224, 224, 48), 1, 0.35)
     return model

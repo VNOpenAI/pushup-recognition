@@ -1,3 +1,2 @@
 tensorflow==2.3.0
-numpy
-keras_drop_block
+opencv-python==4.4.0
