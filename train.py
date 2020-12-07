@@ -6,6 +6,7 @@ import model
 import datetime
 import tensorflow.keras.backend as K
 import matplotlib.pyplot as plt
+from preprocessing import data_folder,images_folder
 tf.random.set_seed(1)
 np.random.seed(1)
 
