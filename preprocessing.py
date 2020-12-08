@@ -79,14 +79,14 @@ class DataSequence(tf.keras.utils.Sequence):
         labels_batch_numpy=[]
         for i in data:
             image_numpy=[]
-            for j in i['name']:
+            for j in i['list_name'][0:5]:
                 single_image=cv2.imread(images_folder+'/'+j)
                 if single_image is None:
                     print('Unable to read this image: ',j)
                     single_iamge=np.zeros((224,224,3))                   
                 single_image=cv2.resize(single_image,dsize=(224,224))
                 image_numpy.append(single_image)
-            image_numpy=np.stack(image_numpy,axis=2)  #image_numpy.shape= 224,224,48
+            image_numpy=np.concatenate(image_numpy,axis=2)  #image_numpy.shape= 224,224,48
             data_batch_numpy.append(image_numpy)
             labels_batch_numpy.append(i['is_pushing_up'])  
         data_batch_numpy=np.array(data_batch_numpy)    #data_batch_numpy.shape = 32,224,224,48
