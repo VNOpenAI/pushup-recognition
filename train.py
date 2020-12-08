@@ -29,8 +29,8 @@ def f1_m(y_true, y_pred):
     return 2*((precision*recall)/(precision+recall+K.epsilon()))
 
 #prepare data
-train_data_class = DataSequence(data_folder+'/train.json',batch_size=16,aug=True)
-validation_data_class = DataSequence(data_folder+'/val.json',batch_size=16,aug=False)
+train_data_class = DataSequence(data_folder+'/train.json',batch_size=8,aug=True)
+validation_data_class = DataSequence(data_folder+'/val.json',batch_size=8,aug=False)
 
 #define callback
 checkpoint_filepath = './checkpoint1'
@@ -52,7 +52,7 @@ class_weight={0: 0.2, 1: 0.8}
 
 #train
 history=my_model.fit(train_data_class,
-                    epochs=45,
+                    epochs=10,
                     verbose=1,
                     validation_data=validation_data_class,
                     class_weight=class_weight,
