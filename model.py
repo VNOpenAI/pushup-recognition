@@ -162,5 +162,5 @@ def MobileNetv2(input_shape, k, alpha=1.0):
     return model
 
 def create_model(input_shape=(224,224,3),alpha=1):
-    model = MobileNetv2((224, 224, 48), 1, 0.35)
+    model = MobileNetv2((224, 224, 15), 1, 0.35)
     return model
