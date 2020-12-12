@@ -1,71 +1,35 @@
+from tensorflow.keras.callbacks import ModelCheckpoint, TensorBoard
 import numpy as np
-import tensorflow as tf 
-import tensorflow.keras as keras 
-from preprocessing import DataSequence
-import model
-import datetime
-import tensorflow.keras.backend as K
+import cv2
 import matplotlib.pyplot as plt
-from preprocessing import data_folder,images_folder
-tf.random.set_seed(1)
+import tensorflow as tf
+import random
+import json
+import math
+import os
+import build_model
+from my_utils import *
+from preprocessing import *
 np.random.seed(1)
+tf.random.set_seed(1)
+
+train = DataSequence('/content/mpii_pushup/images',
+                     'train.json', batch_size=16, aug=True)
+val = DataSequence('/content/mpii_pushup/images',
+                   'val.json', batch_size=16, aug=False)
+
+model = build_model.create_model()
+model.compile(optimizer=tf.keras.optimizers.Adam(),
+              loss='binary_crossentropy',
+              metrics=['accuracy', recall_m, precision_m, f1_m])
 
 
-def recall_m(y_true, y_pred):
-    true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
-    possible_positives = K.sum(K.round(K.clip(y_true, 0, 1)))
-    recall = true_positives / (possible_positives + K.epsilon())
-    return recall
-
-def precision_m(y_true, y_pred):
-    true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
-    predicted_positives = K.sum(K.round(K.clip(y_pred, 0, 1)))
-    precision = true_positives / (predicted_positives + K.epsilon())
-    return precision
-
-def f1_m(y_true, y_pred):
-    precision = precision_m(y_true, y_pred)
-    recall = recall_m(y_true, y_pred)
-    return 2*((precision*recall)/(precision+recall+K.epsilon()))
-
-#prepare data
-train_data_class = DataSequence(data_folder+'/train.json',batch_size=8,aug=True)
-validation_data_class = DataSequence(data_folder+'/val.json',batch_size=8,aug=False)
-
-#define callback
-checkpoint_filepath = './checkpoint1'
-model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
-    filepath=checkpoint_filepath,
-    monitor='val_loss',
-    save_best_only=True)    
-log_dir = "logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
-
-
-#create model and compile
-my_model=model.create_model()
-my_model.compile(loss='binary_crossentropy',
-              #optimizer=keras.optimizers.SGD(lr=0.1, momentum=0.9),
-              optimizer=keras.optimizers.Adam(lr=1e-3),
-              metrics=['accuracy',precision_m,recall_m,f1_m])
-class_weight={0: 0.2, 1: 0.8}
-
-#train
-history=my_model.fit(train_data_class,
-                    epochs=10,
+mc = ModelCheckpoint(filepath=os.path.join(
+    '/content/checkpoint', "model_ep{epoch:03d}.h5"), save_weights_only=False, save_format="h5", verbose=1)
+tb = TensorBoard(log_dir='log', write_graph=True)
+history = model.fit(train,
+                    epochs=45,
+                    validation_data=val,
                     verbose=1,
-                    validation_data=validation_data_class,
-                    class_weight=class_weight,
-                    callbacks=[model_checkpoint_callback,tensorboard_callback],
-                    ) 
-#plot trainning process
-fig=plt.figure()
-fig.add_axes([0.1,0.1,0.85,0.85])
-fig.gca().plot(history.history['loss'],labels='train_loss')
-fig.gca().plot(history.history['vasl_loss'],labels='val_loss')
-fig.suptitle('loss')
-fig.gca().legend()
-plt.show()
-
-#save model
-my_model.save('model.h5')
+                    callbacks=[tb, mc],
+                    )
