@@ -5,6 +5,11 @@ import tensorflow.keras
 
 
 def create_model():
+    """[create model]
+
+    Returns:
+        [tf.keras.Model]: [model for pushup recognition]
+    """
     mobilenet = tf.keras.applications.MobileNetV2(
         input_shape=(224, 224, 3), include_top=False)
     out = tf.keras.layers.GlobalMaxPooling2D()(mobilenet.layers[-1].output)
