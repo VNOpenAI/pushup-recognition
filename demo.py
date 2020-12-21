@@ -1,6 +1,6 @@
 from ispushingup import IsPushingUp
 import cv2
-from my_utils import padding
+from myutils import padding
 import numpy as np 
 
 model = IsPushingUp()

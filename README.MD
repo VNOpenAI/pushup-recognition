@@ -1,9 +1,15 @@
 
-# Pushup_Counter
+# Pushup Recognition
 
+<a href="https://youtu.be/EPBnpKRRuG0"><img src="images/demo-video.png"></a>
 ### Description:
 
-This repo train model for Pushup recognition via video.
+Repo containts training code for pushup recognition via images.
+
+This is part of our pushup-counter project. 
+    [https://github.com/VNOpenAI/pushup-counter-app](https://github.com/VNOpenAI/pushup-counter-app)
+
+
 
 ### Prerequisites.
 
@@ -16,7 +22,7 @@ Before you continue, ensure you meet the following requirements:
 
 note: Download file `data.zip` and unzip, put it in the same folder with your code. 
     
-### Rune demo:
+### Run demo:
 ```
     !python demo.py
 ```

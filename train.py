@@ -8,7 +8,7 @@ import json
 import math
 import os
 from model import *
-from my_utils import *
+from myutils import *
 from preprocessing import *
 np.random.seed(1)
 tf.random.set_seed(1)

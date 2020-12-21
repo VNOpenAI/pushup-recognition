@@ -1,3 +1,5 @@
 /Resource
 *.jpg
 *.h5
+.vscode
+model

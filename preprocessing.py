@@ -6,7 +6,7 @@ import json
 import math
 import os
 import shutil
-from my_utils import *
+from myutils import *
 
 
 class DataSequence(tf.keras.utils.Sequence):
